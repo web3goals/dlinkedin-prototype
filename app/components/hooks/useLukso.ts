@@ -10,17 +10,17 @@ import useToasts from "./useToast";
 export default function useLukso() {
   const { isReady, provider, signer, setSigner } = useContext(LuksoContext);
   const { handleError } = useError();
-  const { showToastError } = useToasts();
   const [signerAddress, setSignerAddress] = useState<string | undefined>();
 
   const connect = async function () {
     try {
-      if (provider && provider instanceof ethers.BrowserProvider) {
-        const signer = await (provider as ethers.BrowserProvider).getSigner();
-        setSigner?.(signer);
-      } else {
-        showToastError(new Error("Provider is uncorrect"));
+      if (!provider || !(provider instanceof ethers.BrowserProvider)) {
+        throw new Error(
+          "Provider is uncorrect, check if you have the Universal Profiles Extension"
+        );
       }
+      const signer = await (provider as ethers.BrowserProvider).getSigner();
+      setSigner?.(signer);
     } catch (error: any) {
       handleError(error, true);
     }
