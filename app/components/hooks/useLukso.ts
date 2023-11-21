@@ -17,7 +17,6 @@ export default function useLukso() {
     try {
       if (provider && provider instanceof ethers.BrowserProvider) {
         const signer = await (provider as ethers.BrowserProvider).getSigner();
-        console.log("signer", signer);
         setSigner?.(signer);
       } else {
         showToastError(new Error("Provider is uncorrect"));
