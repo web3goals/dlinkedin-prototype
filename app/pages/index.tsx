@@ -1,6 +1,6 @@
 import Layout from "@/components/layout";
 import { ExtraLargeLoadingButton } from "@/components/styled/Button";
-import { HREF_ACCOUNT } from "@/constants/hrefs";
+import { HREF_ACCOUNTS } from "@/constants/hrefs";
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
@@ -48,7 +48,7 @@ export default function LandingPage() {
           <Typography variant="h4" mt={2}>
             in a decentralized social network for professionals
           </Typography>
-          <Link href={HREF_ACCOUNT}>
+          <Link href={HREF_ACCOUNTS}>
             <ExtraLargeLoadingButton variant="contained" sx={{ mt: 4 }}>
               Let’s go!
             </ExtraLargeLoadingButton>

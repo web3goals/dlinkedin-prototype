@@ -1,8 +1,9 @@
-import { HREF_ACCOUNT, HREF_ACCOUNTS } from "@/constants/hrefs";
+import { HREF_ACCOUNTS } from "@/constants/hrefs";
 import { theme } from "@/theme";
 import { MenuRounded } from "@mui/icons-material";
 import {
   AppBar,
+  Button,
   Container,
   IconButton,
   Menu,
@@ -16,6 +17,7 @@ import { grey } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import Link from "next/link";
 import { useState } from "react";
+import useLukso from "../hooks/useLukso";
 
 /**
  * Component with a navigation.
@@ -59,8 +61,26 @@ function Logo(props: { sx?: SxProps }) {
 }
 
 function MenuDesktop(props: { sx?: SxProps }) {
+  const { isReady, signerAddress, connect } = useLukso();
+
   return (
     <Stack direction="row" alignItems="center" spacing={4} sx={{ ...props.sx }}>
+      {isReady && !signerAddress && (
+        <Button variant="contained" sx={{ ml: 3.5 }} onClick={() => connect()}>
+          Connect
+        </Button>
+      )}
+      {isReady && signerAddress && (
+        <Link
+          href={`${HREF_ACCOUNTS}/${signerAddress}`}
+          passHref
+          legacyBehavior
+        >
+          <Button variant="contained" sx={{ ml: 3.5 }}>
+            My Reputation
+          </Button>
+        </Link>
+      )}
       <Link href={HREF_ACCOUNTS} passHref legacyBehavior>
         <MuiLink
           fontWeight={700}
@@ -71,16 +91,12 @@ function MenuDesktop(props: { sx?: SxProps }) {
           Explore
         </MuiLink>
       </Link>
-      <Link href={HREF_ACCOUNT} passHref legacyBehavior>
-        <MuiLink fontWeight={700} color="#000000" variant="body2" ml={3.5}>
-          My reputation
-        </MuiLink>
-      </Link>
     </Stack>
   );
 }
 
 function MenuMobile(props: { sx?: SxProps }) {
+  const { isReady, signerAddress, connect } = useLukso();
   const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
   const isOpened = Boolean(anchorElement);
 
@@ -138,11 +154,24 @@ function MenuMobile(props: { sx?: SxProps }) {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
+        {isReady && !signerAddress && (
+          <MenuItem>
+            <Button variant="contained" onClick={() => connect()}>
+              Connect
+            </Button>
+          </MenuItem>
+        )}
+        {isReady && signerAddress && (
+          <Link
+            href={`${HREF_ACCOUNTS}/${signerAddress}`}
+            passHref
+            legacyBehavior
+          >
+            <MenuItem>My Reputation</MenuItem>
+          </Link>
+        )}
         <Link href={HREF_ACCOUNTS} passHref legacyBehavior>
           <MenuItem>Explore</MenuItem>
-        </Link>
-        <Link href={HREF_ACCOUNT} passHref legacyBehavior>
-          <MenuItem>My reputation</MenuItem>
         </Link>
       </Menu>
     </>
