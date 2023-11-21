@@ -73,7 +73,7 @@ function MenuDesktop(props: { sx?: SxProps }) {
       </Link>
       <Link href={HREF_ACCOUNT} passHref legacyBehavior>
         <MuiLink fontWeight={700} color="#000000" variant="body2" ml={3.5}>
-          Account
+          My reputation
         </MuiLink>
       </Link>
     </Stack>
@@ -142,7 +142,7 @@ function MenuMobile(props: { sx?: SxProps }) {
           <MenuItem>Explore</MenuItem>
         </Link>
         <Link href={HREF_ACCOUNT} passHref legacyBehavior>
-          <MenuItem>Account</MenuItem>
+          <MenuItem>My reputation</MenuItem>
         </Link>
       </Menu>
     </>
