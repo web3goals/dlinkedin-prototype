@@ -1,8 +1,15 @@
+import AccountAvatar from "@/components/account/AccountAvatar";
+import AccountLink from "@/components/account/AccountLink";
+import AccountReputation from "@/components/account/AccountReputation";
+import EntityList from "@/components/entity/EntityList";
 import useError from "@/components/hooks/useError";
 import useLukso from "@/components/hooks/useLukso";
+import useLuksoProfileLoader from "@/components/hooks/useLuksoProfileLoader";
 import Layout from "@/components/layout";
+import { CardBox } from "@/components/styled/Card";
 import { reputationContractAbi } from "@/contracts/abi/reputation";
 import { Reputation } from "@/contracts/types/reputation";
+import { Box, SxProps, Typography } from "@mui/material";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 
@@ -48,5 +55,64 @@ export default function AccountsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [provider]);
 
-  return <Layout maxWidth="sm">...</Layout>;
+  return (
+    <Layout maxWidth="sm">
+      <Typography variant="h4" fontWeight={700} textAlign="center">
+        👥 People
+      </Typography>
+      <Typography textAlign="center" mt={1}>
+        Who could potentially become your partners, colleague or friend
+      </Typography>
+      <EntityList
+        entities={accounts}
+        renderEntityCard={(account, index) => (
+          <AccountCard account={account} key={index} />
+        )}
+        noEntitiesText="😐 no accounts"
+        sx={{ mt: 2 }}
+      />
+    </Layout>
+  );
+}
+
+function AccountCard(props: { account: string; sx?: SxProps }) {
+  const { profile: accountProfile } = useLuksoProfileLoader(props.account);
+
+  return (
+    <CardBox
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        ...props.sx,
+      }}
+    >
+      {/* Left part */}
+      <Box>
+        <AccountAvatar
+          account={props.account}
+          accountProfile={accountProfile}
+          size={64}
+          emojiSize={24}
+        />
+      </Box>
+      {/* Right part */}
+      <Box
+        width={1}
+        ml={3}
+        display="flex"
+        flexDirection="column"
+        alignItems="flex-start"
+      >
+        <AccountLink
+          variant="h6"
+          account={props.account}
+          accountProfile={accountProfile}
+        />
+        {accountProfile?.description && (
+          <Typography mt={1}>{accountProfile.description}</Typography>
+        )}
+        <AccountReputation account={props.account} sx={{ mt: 2 }} />
+      </Box>
+    </CardBox>
+  );
 }
