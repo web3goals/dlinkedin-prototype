@@ -45,7 +45,7 @@ export const LargeLoadingButton = styled(
 )<LoadingButtonProps>(({}) => ({
   fontSize: "18px",
   fontWeight: 700,
-  borderRadius: "28px",
+  borderRadius: "32px",
   padding: "14px 28px",
 })) as typeof LoadingButton;
 
