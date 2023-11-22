@@ -1,18 +1,23 @@
 import { DialogContext } from "@/context/dialog";
 import { reputationContractAbi } from "@/contracts/abi/reputation";
 import { Reputation } from "@/contracts/types/reputation";
-import { Statement } from "@/types";
+import { Statement, StatementExtraData } from "@/types";
 import { isAddressesEqual } from "@/utils/addresses";
+import { statementEvaluationToText, statementSkillToText } from "@/utils/text";
 import { Box, SxProps, Typography } from "@mui/material";
 import { ethers } from "ethers";
 import { useContext, useEffect, useState } from "react";
 import EntityList from "../entity/EntityList";
 import useError from "../hooks/useError";
+import useIpfs from "../hooks/useIpfs";
 import useLukso from "../hooks/useLukso";
+import useLuksoProfileLoader from "../hooks/useLuksoProfileLoader";
 import useToasts from "../hooks/useToast";
 import { LargeLoadingButton } from "../styled/Button";
-import { CardBox } from "../styled/Card";
+import { CardBox, ReputationBox } from "../styled/Card";
 import { FullWidthSkeleton } from "../styled/Skeleton";
+import AccountAvatar from "./AccountAvatar";
+import AccountLink from "./AccountLink";
 import AccountPostStatementDialog from "./AccountPostStatementDialog";
 
 /**
@@ -23,9 +28,11 @@ export default function AccountStatements(props: {
   sx?: SxProps;
 }) {
   const { provider } = useLukso();
+  const { handleError } = useError();
   const [isTurnedOn, setIsTurnedOn] = useState<boolean | undefined>();
 
   useEffect(() => {
+    setIsTurnedOn(undefined);
     if (provider) {
       const reputationContract = new ethers.Contract(
         process.env.NEXT_PUBLIC_LUKSO_REPUTATION_CONTRACT as string,
@@ -34,7 +41,8 @@ export default function AccountStatements(props: {
       ) as ethers.BaseContract as Reputation;
       reputationContract
         .balanceOf(props.account)
-        .then((balance) => setIsTurnedOn(balance > 0));
+        .then((balance) => setIsTurnedOn(balance > 0))
+        .catch((error) => handleError(error, true));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [provider, props.account]);
@@ -129,6 +137,7 @@ function AccountStatementsTurnedOff(props: { account: string }) {
 function AccountStatementsTurnedOn(props: { account: string }) {
   const { showDialog, closeDialog } = useContext(DialogContext);
   const { provider } = useLukso();
+  const { handleError } = useError();
   const [statements, setStatements] = useState<Statement[] | undefined>();
 
   useEffect(() => {
@@ -138,20 +147,23 @@ function AccountStatementsTurnedOn(props: { account: string }) {
         reputationContractAbi,
         provider
       ) as ethers.BaseContract as Reputation;
-      reputationContract.getStatements(props.account).then((statements) => {
-        const processedStatements = statements.map(
-          (statement) =>
-            ({
-              author: statement.author,
-              time: Number(statement.time),
-              skill: Number(statement.skill),
-              evaluation: Number(statement.evaluation),
-              extraData: statement.extraData,
-            } as Statement)
-        );
-        processedStatements.reverse();
-        setStatements(processedStatements);
-      });
+      reputationContract
+        .getStatements(props.account)
+        .then((statements) => {
+          const processedStatements = statements.map(
+            (statement) =>
+              ({
+                author: statement.author,
+                time: Number(statement.time),
+                skill: Number(statement.skill),
+                evaluation: Number(statement.evaluation),
+                extraData: statement.extraData,
+              } as Statement)
+          );
+          processedStatements.reverse();
+          setStatements(processedStatements);
+        })
+        .catch((error) => handleError(error, true));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [provider, props.account]);
@@ -188,9 +200,75 @@ function AccountStatementsTurnedOn(props: { account: string }) {
 }
 
 function AccountStatementCard(props: { statement: Statement; sx?: SxProps }) {
+  const { loadJsonFromIpfs } = useIpfs();
+  const { handleError } = useError();
+  const { profile: autorProfile } = useLuksoProfileLoader(
+    props.statement.author
+  );
+  const [statementExtraData, setStatementExtraData] = useState<
+    StatementExtraData | undefined
+  >();
+
+  useEffect(() => {
+    loadJsonFromIpfs(props.statement.extraData)
+      .then((data) => {
+        setStatementExtraData(data);
+      })
+      .catch((error) => handleError(error, true));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.statement]);
+
   return (
-    <CardBox sx={{ display: "flex", flexDirection: "row", ...props.sx }}>
-      <Typography>...</Typography>
+    <CardBox
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        ...props.sx,
+      }}
+    >
+      {/* Left part */}
+      <Box>
+        <AccountAvatar
+          account={props.statement.author}
+          accountProfile={autorProfile}
+        />
+      </Box>
+      {/* Right part */}
+      <Box
+        width={1}
+        ml={3}
+        display="flex"
+        flexDirection="column"
+        alignItems="flex-start"
+      >
+        <AccountLink
+          variant="body2"
+          account={props.statement.author}
+          accountProfile={autorProfile}
+        />
+        <Typography variant="body2" color="text.secondary">
+          {new Date(props.statement.time * 1000).toLocaleString()}
+        </Typography>
+        {statementExtraData ? (
+          <Typography mt={1}>{statementExtraData.comment}</Typography>
+        ) : (
+          <FullWidthSkeleton />
+        )}
+        <ReputationBox sx={{ mt: 1 }}>
+          <Typography fontWeight={700} textAlign="center">
+            {statementEvaluationToText(props.statement.evaluation)}
+          </Typography>
+          <Typography
+            variant="body2"
+            fontWeight={700}
+            color="text.secondary"
+            textAlign="center"
+            mt={0.5}
+          >
+            {statementSkillToText(props.statement.skill)}
+          </Typography>
+        </ReputationBox>
+      </Box>
     </CardBox>
   );
 }
