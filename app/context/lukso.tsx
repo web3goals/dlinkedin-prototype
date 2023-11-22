@@ -21,7 +21,9 @@ export function LuksoProvider({ children }: any) {
     let signer;
     const lukso = (window as any).lukso;
     if (lukso == null) {
-      // provider = ethers.getDefaultProvider(); // TODO: Implement
+      provider = new ethers.JsonRpcProvider(
+        process.env.NEXT_PUBLIC_LUKSO_RPC_PROVIDER
+      );
     } else {
       provider = new ethers.BrowserProvider(lukso);
       const signers = await provider.listAccounts();
