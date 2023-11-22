@@ -2,7 +2,6 @@ import { LuksoContext } from "@/context/lukso";
 import { ethers } from "ethers";
 import { useContext, useEffect, useState } from "react";
 import useError from "./useError";
-import useToasts from "./useToast";
 
 /**
  * Hook for work with Lukso.
