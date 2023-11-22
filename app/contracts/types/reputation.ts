@@ -419,7 +419,7 @@ export interface Reputation extends BaseContract {
       account: AddressLike,
       skill: BigNumberish,
       evaluation: BigNumberish,
-      data: string
+      extraData: string
     ],
     [void],
     "nonpayable"
@@ -550,7 +550,7 @@ export interface Reputation extends BaseContract {
       account: AddressLike,
       skill: BigNumberish,
       evaluation: BigNumberish,
-      data: string
+      extraData: string
     ],
     [void],
     "nonpayable"

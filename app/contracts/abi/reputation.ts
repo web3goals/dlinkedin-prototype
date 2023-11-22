@@ -587,7 +587,7 @@ export const reputationContractAbi = [
       },
       {
         internalType: "string",
-        name: "data",
+        name: "extraData",
         type: "string",
       },
     ],
