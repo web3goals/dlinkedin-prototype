@@ -55,7 +55,6 @@ contract Reputation is LSP8IdentifiableDigitalAsset {
         address account
     ) external view returns (Statement[] memory) {
         bytes32 tokenId = _accountToBytes32(account);
-        _existsOrError(tokenId);
         return _statements[tokenId];
     }
 
