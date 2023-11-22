@@ -89,20 +89,31 @@ function AccountStatementsTurnedOff(props: { account: string }) {
   return (
     <>
       <Typography textAlign="center" mt={1}>
-        about the person&apos;s skill that form their reputation are not yet
-        turned on by the person
+        about the person&apos;s skill that form their reputation
       </Typography>
-      {signer && isAddressesEqual(props.account, signerAddress) && (
-        <LargeLoadingButton
-          variant="outlined"
-          sx={{ mt: 2 }}
-          loading={state === "TURNING_ON"}
-          disabled={state === "TURNING_ON" || state === "TURNED_ON"}
-          onClick={() => turnOn()}
-        >
-          Turn On
-        </LargeLoadingButton>
-      )}
+      <CardBox
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          mt: 2,
+        }}
+      >
+        <Typography textAlign="center">
+          😟 Statements are not turned on
+        </Typography>
+        {signer && isAddressesEqual(props.account, signerAddress) && (
+          <LargeLoadingButton
+            variant="outlined"
+            sx={{ mt: 2 }}
+            loading={state === "TURNING_ON"}
+            disabled={state === "TURNING_ON" || state === "TURNED_ON"}
+            onClick={() => turnOn()}
+          >
+            Turn On
+          </LargeLoadingButton>
+        )}
+      </CardBox>
     </>
   );
 }

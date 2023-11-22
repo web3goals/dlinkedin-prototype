@@ -19,6 +19,7 @@ export default function AccountPage() {
         <>
           <AccountProfile account={address as string} />
           <AccountActions account={address as string} sx={{ mt: 2 }} />
+          <ThickDivider sx={{ mt: 6 }} />
           <AccountStatements account={address as string} sx={{ mt: 6 }} />
         </>
       ) : (
