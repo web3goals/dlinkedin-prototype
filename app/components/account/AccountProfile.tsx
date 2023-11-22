@@ -46,7 +46,7 @@ export default function AccountProfile(props: {
           {accountProfile.description}
         </Typography>
       )}
-      {accountProfile?.links && (
+      {accountProfile?.links && accountProfile.links.length > 0 && (
         <Stack direction="row" spacing={1} mt={2}>
           {accountProfile.links.map((link, index) => (
             <MuiLink
