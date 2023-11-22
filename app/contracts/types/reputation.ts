@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type {
   BaseContract,
+  BigNumberish,
   BytesLike,
   FunctionFragment,
   Result,
@@ -22,6 +23,30 @@ import type {
   TypedContractMethod,
 } from "./common";
 
+export declare namespace Reputation {
+  export type StatementStruct = {
+    author: AddressLike;
+    time: BigNumberish;
+    skill: BigNumberish;
+    evaluation: BigNumberish;
+    extraData: string;
+  };
+
+  export type StatementStructOutput = [
+    author: string,
+    time: bigint,
+    skill: bigint,
+    evaluation: bigint,
+    extraData: string
+  ] & {
+    author: string;
+    time: bigint;
+    skill: bigint;
+    evaluation: bigint;
+    extraData: string;
+  };
+}
+
 export interface ReputationInterface extends Interface {
   getFunction(
     nameOrSignature:
@@ -31,8 +56,10 @@ export interface ReputationInterface extends Interface {
       | "getData"
       | "getDataBatch"
       | "getOperatorsOf"
+      | "getStatements"
       | "isOperatorFor"
       | "owner"
+      | "postStatement"
       | "renounceOwnership"
       | "revokeOperator"
       | "setData"
@@ -74,10 +101,18 @@ export interface ReputationInterface extends Interface {
     values: [BytesLike]
   ): string;
   encodeFunctionData(
+    functionFragment: "getStatements",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "isOperatorFor",
     values: [AddressLike, BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "postStatement",
+    values: [AddressLike, BigNumberish, BigNumberish, string]
+  ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
@@ -139,10 +174,18 @@ export interface ReputationInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getStatements",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "isOperatorFor",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "postStatement",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
@@ -357,6 +400,12 @@ export interface Reputation extends BaseContract {
 
   getOperatorsOf: TypedContractMethod<[tokenId: BytesLike], [string[]], "view">;
 
+  getStatements: TypedContractMethod<
+    [account: AddressLike],
+    [Reputation.StatementStructOutput[]],
+    "view"
+  >;
+
   isOperatorFor: TypedContractMethod<
     [operator: AddressLike, tokenId: BytesLike],
     [boolean],
@@ -364,6 +413,17 @@ export interface Reputation extends BaseContract {
   >;
 
   owner: TypedContractMethod<[], [string], "view">;
+
+  postStatement: TypedContractMethod<
+    [
+      account: AddressLike,
+      skill: BigNumberish,
+      evaluation: BigNumberish,
+      data: string
+    ],
+    [void],
+    "nonpayable"
+  >;
 
   renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
 
@@ -467,6 +527,13 @@ export interface Reputation extends BaseContract {
     nameOrSignature: "getOperatorsOf"
   ): TypedContractMethod<[tokenId: BytesLike], [string[]], "view">;
   getFunction(
+    nameOrSignature: "getStatements"
+  ): TypedContractMethod<
+    [account: AddressLike],
+    [Reputation.StatementStructOutput[]],
+    "view"
+  >;
+  getFunction(
     nameOrSignature: "isOperatorFor"
   ): TypedContractMethod<
     [operator: AddressLike, tokenId: BytesLike],
@@ -476,6 +543,18 @@ export interface Reputation extends BaseContract {
   getFunction(
     nameOrSignature: "owner"
   ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "postStatement"
+  ): TypedContractMethod<
+    [
+      account: AddressLike,
+      skill: BigNumberish,
+      evaluation: BigNumberish,
+      data: string
+    ],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
     nameOrSignature: "renounceOwnership"
   ): TypedContractMethod<[], [void], "nonpayable">;

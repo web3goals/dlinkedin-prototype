@@ -489,6 +489,52 @@ export const reputationContractAbi = [
     inputs: [
       {
         internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "getStatements",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "author",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "time",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "skill",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "evaluation",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "extraData",
+            type: "string",
+          },
+        ],
+        internalType: "struct Reputation.Statement[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "operator",
         type: "address",
       },
@@ -520,6 +566,34 @@ export const reputationContractAbi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "skill",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "evaluation",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "data",
+        type: "string",
+      },
+    ],
+    name: "postStatement",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
