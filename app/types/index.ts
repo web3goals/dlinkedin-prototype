@@ -9,3 +9,15 @@ export type ProfileLink = {
   title: string;
   url: string;
 };
+
+export type Statement = {
+  author: string;
+  time: number;
+  skill: number;
+  evaluation: number;
+  extraData: string;
+};
+
+export type StatementExtraData = {
+  comment: string;
+};

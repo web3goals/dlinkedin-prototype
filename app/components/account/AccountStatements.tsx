@@ -1,15 +1,19 @@
+import { DialogContext } from "@/context/dialog";
 import { reputationContractAbi } from "@/contracts/abi/reputation";
 import { Reputation } from "@/contracts/types/reputation";
+import { Statement } from "@/types";
 import { isAddressesEqual } from "@/utils/addresses";
 import { Box, SxProps, Typography } from "@mui/material";
 import { ethers } from "ethers";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import EntityList from "../entity/EntityList";
 import useError from "../hooks/useError";
 import useLukso from "../hooks/useLukso";
 import useToasts from "../hooks/useToast";
 import { LargeLoadingButton } from "../styled/Button";
 import { CardBox } from "../styled/Card";
 import { FullWidthSkeleton } from "../styled/Skeleton";
+import AccountPostStatementDialog from "./AccountPostStatementDialog";
 
 /**
  * Component with account statements.
@@ -69,13 +73,17 @@ function AccountStatementsTurnedOff(props: { account: string }) {
   async function turnOn() {
     try {
       setState("TURNING_ON");
+      if (!signer) {
+        throw new Error(
+          "Signer is uncorrect, check if the Universal Profiles Extension is connected"
+        );
+      }
       const reputationContract = new ethers.Contract(
         process.env.NEXT_PUBLIC_LUKSO_REPUTATION_CONTRACT as string,
         reputationContractAbi,
         signer
       ) as ethers.BaseContract as Reputation;
-      const tx = await reputationContract.create();
-      await tx.wait();
+      await reputationContract.create();
       showToastSuccess(
         "Statements are turned on, reload the page to update the data"
       );
@@ -102,7 +110,7 @@ function AccountStatementsTurnedOff(props: { account: string }) {
         <Typography textAlign="center">
           😟 Statements are not turned on
         </Typography>
-        {signer && isAddressesEqual(props.account, signerAddress) && (
+        {isAddressesEqual(props.account, signerAddress) && (
           <LargeLoadingButton
             variant="outlined"
             sx={{ mt: 2 }}
@@ -119,15 +127,70 @@ function AccountStatementsTurnedOff(props: { account: string }) {
 }
 
 function AccountStatementsTurnedOn(props: { account: string }) {
+  const { showDialog, closeDialog } = useContext(DialogContext);
+  const { provider } = useLukso();
+  const [statements, setStatements] = useState<Statement[] | undefined>();
+
+  useEffect(() => {
+    if (provider) {
+      const reputationContract = new ethers.Contract(
+        process.env.NEXT_PUBLIC_LUKSO_REPUTATION_CONTRACT as string,
+        reputationContractAbi,
+        provider
+      ) as ethers.BaseContract as Reputation;
+      reputationContract.getStatements(props.account).then((statements) => {
+        const processedStatements = statements.map(
+          (statement) =>
+            ({
+              author: statement.author,
+              time: Number(statement.time),
+              skill: Number(statement.skill),
+              evaluation: Number(statement.evaluation),
+              extraData: statement.extraData,
+            } as Statement)
+        );
+        processedStatements.reverse();
+        setStatements(processedStatements);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [provider, props.account]);
+
   return (
     <>
       <Typography textAlign="center" mt={1}>
         about the person&apos;s skill that form their reputation
       </Typography>
+      <LargeLoadingButton
+        variant="outlined"
+        sx={{ mt: 2 }}
+        onClick={() =>
+          showDialog?.(
+            <AccountPostStatementDialog
+              account={props.account}
+              onClose={closeDialog}
+            />
+          )
+        }
+      >
+        Post
+      </LargeLoadingButton>
+      <EntityList
+        entities={statements}
+        renderEntityCard={(statement, index) => (
+          <AccountStatementCard statement={statement} key={index} />
+        )}
+        noEntitiesText="😐 no statements"
+        sx={{ mt: 2 }}
+      />
     </>
   );
 }
 
-function AccountStatementCard(props: {}) {
-  return <CardBox>...</CardBox>;
+function AccountStatementCard(props: { statement: Statement; sx?: SxProps }) {
+  return (
+    <CardBox sx={{ display: "flex", flexDirection: "row", ...props.sx }}>
+      <Typography>...</Typography>
+    </CardBox>
+  );
 }

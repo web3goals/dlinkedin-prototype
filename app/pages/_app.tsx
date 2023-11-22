@@ -1,3 +1,4 @@
+import { DialogProvider } from "@/context/dialog";
 import { LuksoProvider } from "@/context/lukso";
 import "@/styles/globals.css";
 import { theme } from "@/theme";
@@ -11,8 +12,10 @@ export default function App({ Component, pageProps }: AppProps) {
     <LuksoProvider>
       <ThemeProvider theme={theme}>
         <SnackbarProvider maxSnack={3}>
-          <NextNProgress height={4} color={theme.palette.primary.main} />
-          <Component {...pageProps} />
+          <DialogProvider>
+            <NextNProgress height={4} color={theme.palette.primary.main} />
+            <Component {...pageProps} />
+          </DialogProvider>
         </SnackbarProvider>
       </ThemeProvider>
     </LuksoProvider>
