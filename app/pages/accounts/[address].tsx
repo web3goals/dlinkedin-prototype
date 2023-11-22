@@ -1,6 +1,8 @@
+import AccountActions from "@/components/account/AccountActions";
 import AccountProfile from "@/components/account/AccountProfile";
 import AccountStatements from "@/components/account/AccountStatements";
 import Layout from "@/components/layout";
+import { ThickDivider } from "@/components/layout/Divider";
 import { FullWidthSkeleton } from "@/components/styled/Skeleton";
 import { useRouter } from "next/router";
 
@@ -16,6 +18,7 @@ export default function AccountPage() {
       {address ? (
         <>
           <AccountProfile account={address as string} />
+          <AccountActions account={address as string} sx={{ mt: 2 }} />
           <AccountStatements account={address as string} sx={{ mt: 6 }} />
         </>
       ) : (
