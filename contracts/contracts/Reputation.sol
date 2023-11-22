@@ -38,12 +38,12 @@ contract Reputation is LSP8IdentifiableDigitalAsset {
         address account,
         uint skill,
         uint evaluation,
-        string memory data
+        string memory extraData
     ) external {
         bytes32 tokenId = _accountToBytes32(account);
         _existsOrError(tokenId);
         _statements[tokenId].push(
-            Statement(msg.sender, block.timestamp, skill, evaluation, data)
+            Statement(msg.sender, block.timestamp, skill, evaluation, extraData)
         );
     }
 
