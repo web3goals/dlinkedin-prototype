@@ -8,6 +8,7 @@ import {
 import useLuksoProfileLoader from "../hooks/useLuksoProfileLoader";
 import AccountAvatar from "./AccountAvatar";
 import AccountLink from "./AccountLink";
+import AccountReputation from "./AccountReputation";
 
 /**
  * Component with an account profile.
@@ -41,7 +42,7 @@ export default function AccountProfile(props: {
         sx={{ mt: 2 }}
       />
       {accountProfile?.description && (
-        <Typography textAlign="center" mt={1}>
+        <Typography textAlign="center" mt={2}>
           {accountProfile.description}
         </Typography>
       )}
@@ -59,6 +60,7 @@ export default function AccountProfile(props: {
           ))}
         </Stack>
       )}
+      <AccountReputation account={props.account} sx={{ mt: 2 }} />
     </Box>
   );
 }

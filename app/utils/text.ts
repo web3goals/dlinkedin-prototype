@@ -30,20 +30,20 @@ export function statementSkillToText(skill: number) {
 }
 
 export function statementEvaluationToText(evaluation: number) {
-  if (evaluation === 5) {
-    return `${evaluation} 🔥`;
+  const evaluationText = evaluation.toLocaleString("en", {
+    useGrouping: false,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  });
+  if (evaluation >= 5) {
+    return `${evaluationText} 🔥`;
+  } else if (evaluation >= 4) {
+    return `${evaluationText} 👍`;
+  } else if (evaluation >= 3) {
+    return `${evaluationText} 😑`;
+  } else if (evaluation >= 2) {
+    return `${evaluationText} 👎`;
+  } else {
+    return `${evaluationText} 😡`;
   }
-  if (evaluation === 4) {
-    return `${evaluation} 👍`;
-  }
-  if (evaluation === 3) {
-    return `${evaluation} 😑`;
-  }
-  if (evaluation === 2) {
-    return `${evaluation} 👎`;
-  }
-  if (evaluation === 1) {
-    return `${evaluation} 😡`;
-  }
-  return `${evaluation} ⭐`;
 }

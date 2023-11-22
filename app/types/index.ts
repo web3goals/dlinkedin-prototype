@@ -21,3 +21,9 @@ export type Statement = {
 export type StatementExtraData = {
   comment: string;
 };
+
+export type Reputation = {
+  skill: number;
+  evaluation: number;
+  statements: number;
+};
