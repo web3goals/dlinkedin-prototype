@@ -5,7 +5,7 @@ import {
   SxProps,
   Typography,
 } from "@mui/material";
-import useLuksoProfileLoader from "../hooks/useLuksoProfileLoader";
+import useLuksoProfileLoader from "../../hooks/useLuksoProfileLoader";
 import AccountAvatar from "./AccountAvatar";
 import AccountLink from "./AccountLink";
 import AccountReputation from "./AccountReputation";

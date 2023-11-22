@@ -1,6 +1,6 @@
 import { SxProps, Box } from "@mui/material";
 import { LargeLoadingButton } from "../styled/Button";
-import useToasts from "../hooks/useToast";
+import useToasts from "../../hooks/useToast";
 
 /**
  * Component with account actions.

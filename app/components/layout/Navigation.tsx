@@ -17,7 +17,7 @@ import { grey } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import Link from "next/link";
 import { useState } from "react";
-import useLukso from "../hooks/useLukso";
+import useLukso from "../../hooks/useLukso";
 
 /**
  * Component with a navigation.
