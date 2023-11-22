@@ -6,5 +6,6 @@
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "solidity.packageDefaultDependenciesDirectory": "/contracts/node_modules"
 }
