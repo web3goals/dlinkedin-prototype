@@ -1,4 +1,5 @@
 import AccountProfile from "@/components/account/AccountProfile";
+import AccountStatements from "@/components/account/AccountStatements";
 import Layout from "@/components/layout";
 import { FullWidthSkeleton } from "@/components/styled/Skeleton";
 import { useRouter } from "next/router";
@@ -15,6 +16,7 @@ export default function AccountPage() {
       {address ? (
         <>
           <AccountProfile account={address as string} />
+          <AccountStatements account={address as string} sx={{ mt: 6 }} />
         </>
       ) : (
         <FullWidthSkeleton />
