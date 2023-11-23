@@ -19,4 +19,4 @@ To create this project, I used:
 
 ## 🏗️ Architecture
 
-![Architecture](/architecture.png)
+![Architecture](/arch.png)
