@@ -202,7 +202,7 @@ function AccountStatementsTurnedOn(props: { account: string }) {
 function AccountStatementCard(props: { statement: Statement; sx?: SxProps }) {
   const { loadJsonFromIpfs } = useIpfs();
   const { handleError } = useError();
-  const { profile: autorProfile } = useLuksoProfileLoader(
+  const { profile: authorProfile } = useLuksoProfileLoader(
     props.statement.author
   );
   const [statementExtraData, setStatementExtraData] = useState<
@@ -230,7 +230,7 @@ function AccountStatementCard(props: { statement: Statement; sx?: SxProps }) {
       <Box>
         <AccountAvatar
           account={props.statement.author}
-          accountProfile={autorProfile}
+          accountProfile={authorProfile}
         />
       </Box>
       {/* Right part */}
@@ -244,7 +244,7 @@ function AccountStatementCard(props: { statement: Statement; sx?: SxProps }) {
         <AccountLink
           variant="body2"
           account={props.statement.author}
-          accountProfile={autorProfile}
+          accountProfile={authorProfile}
         />
         <Typography variant="body2" color="text.secondary">
           {new Date(props.statement.time * 1000).toLocaleString()}

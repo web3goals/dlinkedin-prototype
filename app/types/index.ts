@@ -22,6 +22,16 @@ export type StatementExtraData = {
   comment: string;
 };
 
+export type Message = {
+  author: string;
+  time: number;
+  extraData: string;
+};
+
+export type MessageExtraData = {
+  message: string;
+};
+
 export type Reputation = {
   skill: number;
   evaluation: number;
