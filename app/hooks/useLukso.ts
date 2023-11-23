@@ -25,9 +25,6 @@ export default function useLukso() {
     }
   };
 
-  // TODO: Implement
-  const disconnect = async function () {};
-
   useEffect(() => {
     if (signer) {
       signer.getAddress().then((address) => setSignerAddress(address));
@@ -42,6 +39,5 @@ export default function useLukso() {
     signer,
     signerAddress,
     connect,
-    disconnect,
   };
 }
