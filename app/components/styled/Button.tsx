@@ -51,9 +51,15 @@ export const LargeLoadingButton = styled(
 
 export const MediumLoadingButton = styled(
   StyledLoadingButton
-)<LoadingButtonProps>(({}) => ({
+)<LoadingButtonProps>(({ variant }) => ({
   fontSize: "14px",
   fontWeight: 700,
   borderRadius: "24px",
   padding: "8px 18px",
+  ...(variant === "outlined" && {
+    boxShadow: "inset 0px 0px 0px 4px",
+    "&:hover": {
+      boxShadow: "inset 0px 0px 0px 4px",
+    },
+  }),
 })) as typeof LoadingButton;

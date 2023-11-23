@@ -22,6 +22,12 @@ export type StatementExtraData = {
   comment: string;
 };
 
+export type Conversation = {
+  accountOne: string;
+  accountTwo: string;
+  time: number;
+};
+
 export type Message = {
   author: string;
   time: number;
