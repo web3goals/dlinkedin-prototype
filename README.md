@@ -6,7 +6,7 @@ Earn reputation in a decentralized social network for professionals
 
 - Application - [dlinkedin.vercel.app](https://dlinkedin.vercel.app/)
 - Contracts (LUKSO Testnet):
-  - Reputatation - [0x1e4712A93beEc0aa26151CF44061eE91DD56f921](https://explorer.execution.testnet.lukso.network/address/0x1e4712A93beEc0aa26151CF44061eE91DD56f921)
+  - Reputation - [0x1e4712A93beEc0aa26151CF44061eE91DD56f921](https://explorer.execution.testnet.lukso.network/address/0x1e4712A93beEc0aa26151CF44061eE91DD56f921)
   - Chat - [0x2168609301437822c7AD3f35114B10941866F20a](https://explorer.execution.testnet.lukso.network/address/0x2168609301437822c7AD3f35114B10941866F20a)
 
 ## ⚒️ How it's made
